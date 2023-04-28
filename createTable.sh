@@ -20,24 +20,24 @@ select Op in "Create Table" "Back"
 		esac
 	done
 
-if [[ $tableName == [!a-zA-Z0-9_] ]]
+if [[ $tableName == *[!a-zA-Z0-9_]* ]]
 then
 	echo "Invalid Table Name"
-	. ./createTable.sh
+	. ../../createTable.sh
 elif [[ $tableName == [0-9]* ]]
 then 
 	echo "Table name can't start with number"
- 	. ./createTable.sh
+ 	. ../../createTable.sh
 elif [[ $tableName == "" ]]
 then 
 	echo "Table name can't be empty"
-	. ./createTable.sh
+	. ../../createTable.sh
 fi
 
 if [[ -f $tableName ]]
 then
 	echo "Sorry but $tableName already exists, Choose another name"
-	. ./createTable.sh
+	. ../../createTable.sh
 fi
 
 echo -n "Enter Number of fields: "

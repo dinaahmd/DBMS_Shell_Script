@@ -7,6 +7,7 @@ ls -F ./ |  sed -n '/meta_/!p' | column -t
 
 echo -n "Please Enter the Name of the Table You Want to Update:"
 read tableName
+
 while [ true ]
 do
     if [ -f ./$tableName ]
@@ -33,37 +34,23 @@ do
                 head -1 $tableName >> oldvalue
                 grep -w "$value" $tableName >> oldvalue
                 column -t -s "|" oldvalue
-            fi
-	    if [[ $col_val == "" ]]
-            then
-                echo "This Value does not exist"
-                continue
-            else
-                echo -n "Enter the name of the column that you want to update: "
-                read u_col   
-                u_colnum=`awk 'BEGIN{FS="|"}{if(NR==1){for(i=1;i<=NF;i++){if($i=="'$u_col'") print i}}}' $tableName 2>> /dev/null` 
-                if [[ $u_colnum == "" ]]
-                then
-                    echo "This Value does not exist"
-                    continue
-                else
-		    echo -n "Please Enter the new value: "
-                    read newvalue
-                    NR=`awk 'BEGIN{FS="|"}{if ($'$col_num' == "'$value'") print NR}' $tableName 2>>/dev/null` 
-                    oldvalue=`awk 'BEGIN{FS="|"}{if(NR=='$NR'){for(i=1;i<=NF;i++){if(i=='$u_colnum') print $i}}}' $tableName 2>> /dev/null` 
-                    sed -i ''$NR's/'$oldvalue'/'$newvalue'/g' $tableName 2>>/dev/null
-                    echo "The Table After Update: "
-                    head -1 $tableName >> newval
-                    grep -w "$newvalue" $tableName >> newval
-                    column -t -s "|" newval
+                # Enter New Value
+                echo -n "Please Enter the new value: "
+		    read newvalue
+		    NR=`awk 'BEGIN{FS="|"}{if ($'$col_num' == "'$value'") print NR}' $tableName 2>>/dev/null` 
+		    oldvalue=`awk 'BEGIN{FS="|"}{if(NR=='$NR'){for(i=1;i<=NF;i++){if(i=='$col_num') print $i}}}' $tableName 2>> /dev/null` 
+		    sed -i ''$NR's/'$oldvalue'/'$newvalue'/g' $tableName 2>>/dev/null
+		    echo "The Table After Update: "
+		    head -1 $tableName >> newval
+		    grep -w "$newvalue" $tableName >> newval
+		    column -t -s "|" newval
 		    echo ""
-                    echo "The Table Before Update: "
-                    column -t -s "|" oldvalue
+		    echo "The Table Before Update: "
+		    column -t -s "|" oldvalue
 		    echo ""
-                    echo "The Table is Updated Successfully"
-                    rm -rf oldvalue newval
-                    break
-                fi
+		    echo "The Table is Updated Successfully"
+		    rm -rf oldvalue newval
+		    break
             fi
         fi
     else
