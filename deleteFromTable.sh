@@ -14,9 +14,9 @@ do
             echo -n "Please Enter Table Name: "
             read tableName
             if [[ -f $tableName ]] 
-	    then
+	        then
                 echo "$tableName Table Content is: "
-		column -t -s "|" $tableName
+		        column -t -s "|" $tableName
                 sed -i '2,$d' $tableName
                 echo "Table Data is deleted Successfully " 
                 . ../../tableMenu.sh 
@@ -28,7 +28,7 @@ do
             ;;  
       
       "Delete Specific Row")
-
+      
         echo "Tables To Delete"
         ls -F ./ |  sed -n '/meta_/!p' | column -t
         echo -n "Please Enter Table Name: "
